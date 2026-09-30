@@ -1,0 +1,22 @@
+Voici un fichier Excel à convertir en script SQL pour la table VenteSLAT_test.
+Le nom de la table doit être entre `VenteSLAT_test`.
+Avant insertion des données de l'excel, supprime dans la table VenteSLAT_test toutes les lignes où Origine = 'FrancoisDesAlpes' (pour faire le ménage).
+Convertis le premier onglet du fichier Excel en requêtes INSERT SQL, avec gestion correcte des valeurs NULL (qui doivent rester en l'état), des chaînes, et des dates au format YYYY-MM-DD HH:MM:SS entre apostrophes simples.
+Génère un fichier .sql, en UTF-8, contenant ce script complet, prêt à être exécuté dans MySQL.
+Assure-toi que le fichier est bien en UTF-8
+Merci.
+
+DELETE FROM `VenteSLAT_test` WHERE Origine = 'FrancoisDesAlpes';
+
+/!\ attention au "Réceptionné", après l'import (qui passe mal pour le moment)
+
+
+Sinon : https://tableconvert.com/fr/excel-to-sql
+
+
+
+
+Ajout à faire aussi dans la table de LOG.
+Par contre, il faut modifier la requête pour 
+- mettre dans la bonne table
+- remplacer Id par IdArticle
