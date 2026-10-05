@@ -1,0 +1,39 @@
+# Dossiers et fichiers obsolètes identifiés dans l'audit
+Old/
+**/Old/
+_adminer.php
+**/_adminer.php
+**/connectiondemo.php
+
+# Sauvegardes et fichiers temporaires
+*.bak
+*.old
+*.pre
+*~
+
+# Fichiers d'audit (contenaient un mot de passe en clair)
+audit_docker*.txt
+
+# Git et config projet
+.git
+.gitignore
+.github
+
+# Docker lui-même (inutile dans l'image)
+Dockerfile
+docker-compose.yml
+docker-compose.yaml
+.dockerignore
+
+# Environnement local / secrets
+.env
+.env.*
+
+# OS / éditeurs
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs locaux éventuels
+*.log
