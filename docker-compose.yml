@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: jslat_app
+    restart: always
+    environment:
+      DB_HOST: db
+      DB_NAME: slat_parapente
+      DB_USER: ${MYSQL_USER:-slat_user}
+      DB_PASSWORD: ${MYSQL_PASSWORD:-slat_password}
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    container_name: jslat_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: slat_parapente
+      MYSQL_USER: ${MYSQL_USER:-slat_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-slat_password}
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: jslat_pma
+    restart: always
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+    depends_on:
+      - db
+
+volumes:
+  mysql_data:
