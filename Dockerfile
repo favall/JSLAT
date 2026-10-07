@@ -1,7 +1,7 @@
 FROM php:5.6-apache
 
-RUN sed -i 's/deb.debian.org/archive.debian.org/g; s/security.debian.org/archive.debian.org/g; s|/debian-security|/debian|g' /etc/apt/sources.list \
-    && sed -i '/stretch-updates/d' /etc/apt/sources.list \
+RUN echo "deb [trusted=yes] http://archive.debian.org/debian stretch main contrib non-free" > /etc/apt/sources.list \
+    && echo "deb [trusted=yes] http://archive.debian.org/debian-security stretch/updates main contrib non-free" >> /etc/apt/sources.list \
     && apt-get update && apt-get install -y \
         libicu-dev libzip-dev libpng-dev libjpeg-dev libfreetype6-dev locales \
     && echo "fr_FR.UTF-8 UTF-8" >> /etc/locale.gen && locale-gen \
