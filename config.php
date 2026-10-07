@@ -41,10 +41,10 @@ define('SMTP_HOST', getenv('SMTP_HOST') ?: 'smtp.postmarkapp.com');
 define('SMTP_PORT', getenv('SMTP_PORT') ?: 587);
 
 // Identifiant de connexion au serveur SMTP
-define('SMTP_USER', getenv('SMTP_USER') ?: 'identifiant_local');
+define('SMTP_USER', getenv('SMTP_USER'));
 
 // Mot de passe ou Clé d'API du serveur SMTP
-define('SMTP_PASS', getenv('SMTP_PASS') ?: 'mot_de_passe_local');
+define('SMTP_PASS', getenv('SMTP_PASS'));
 
 
 // -------------------------------------------------------------------------
