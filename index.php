@@ -2,7 +2,7 @@
 require_once 'inc/functions.php';
 // ********************************************************************************************************
 // Décommenter la ligne ci-dessous une fois que les réceptions de matériel sont fermées.
-   retouraccueil('finsaisie.php');    
+//   retouraccueil('finsaisie.php');    
 //
 // ********************************************************************************************************
 ?>
