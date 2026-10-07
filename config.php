@@ -54,5 +54,5 @@ define('SMTP_PASS', getenv('SMTP_PASS') ?: 'mot_de_passe_local');
 // Clé secrète utilisée par les fonctions f_crypt() et f_decrypt() 
 // pour chiffrer les données sensibles (comme les IBAN ou les matricules).
 // En production, cette clé pourra être définie dans Coolify.
-define('APP_KEY', getenv('APP_KEY') ?: '!Slatparapente31!');
+define('APP_KEY', getenv('APP_KEY'));
 ?>
