@@ -18,16 +18,16 @@
 // -------------------------------------------------------------------------
 
 // Hôte de la base : correspond au nom du service BDD dans le réseau Docker Coolify
-define('DB_HOST', getenv('DB_HOST') ?: 'localhost'); 
+define('DB_HOST', getenv('DB_HOST')); 
 
 // Utilisateur de la base de données
-define('DB_USER', getenv('DB_USER') ?: 'root');
+define('DB_USER', getenv('DB_USER'));
 
 // Mot de passe de la base de données (laissé vide en local par défaut sur WAMP/XAMPP)
-define('DB_PASS', getenv('DB_PASS') ?: '');
+define('DB_PASS', getenv('DB_PASS'));
 
 // Nom de la base de données
-define('DB_NAME', getenv('DB_NAME') ?: 'slat_soft');
+define('DB_NAME', getenv('DB_NAME'));
 
 
 // -------------------------------------------------------------------------
