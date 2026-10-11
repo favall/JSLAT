@@ -1,9 +1,14 @@
 <?php
 require_once 'inc/functions.php';
+include('variables.php');
+
+
+
 // ********************************************************************************************************
-// Décommenter la ligne ci-dessous une fois que les fiches ont été générées en pdf
- $lien = "modfich_locked.php?Id=".urlencode($_GET['Id']); retouraccueil($lien);    
-//
+// Bloque la modification une fois que les fiches ont été générées en pdf
+if (new DateTime() > $date_impression) {
+  $lien = "modfich_locked.php?Id=".urlencode($_GET['Id']); retouraccueil($lien);    
+}//
 // ********************************************************************************************************
 ?>
 
