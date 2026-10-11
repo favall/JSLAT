@@ -31,6 +31,14 @@
 <div class="container">
 
 <h1>Rappel de tous les liens utiles <br>(à destination des <b>Administrateurs</b> de la vente)</h1>	
+
+<br>
+<h2>A la remise en route de la vente</h2>	
+<ol>
+	<li>Mettre à jour le fichier variable.php avec les nouvelles dates</li>
+	<li>Réinitialiser les 3 tables (VenteSLAT, VenteSLAT.log et VenteSLAT_factu)</li>
+</ol>
+
 <h2>A tout moment</h2>	
 
 Cette page : <a href="LiensAdmin.php" target="_blank">LiensAdmin.php</a><br>
@@ -59,7 +67,6 @@ Lien vers le formulaire : <a href="index.php" target="_blank">index.php</a><br>
 
 Lien qui permet de générer l'ensemble des fiches, pour impression : <a href="ficheAll.php" target="_blank">ficheAll.php</a><br>
 Génère les fiches, prêtes à être imprimées pour l'intégralité des articles, sauf ceux de François des Alpes.<br>
-<b>Une fois les fiches imprimées : 3 lignes pour lesquelles il faut retirer le commentaire // dans modfich (en haut), index3 (au milieu) et index4 (en bas)</b>
 <br>
 
 <h2>Le jour de la vente</h2>
