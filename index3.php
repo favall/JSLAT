@@ -42,9 +42,10 @@ include('variables.php');
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-require 'inc/PHPMailer/src/Exception.php';
-require 'inc/PHPMailer/src/PHPMailer.php';
-require 'inc/PHPMailer/src/SMTP.php';
+
+require_once __DIR__ . '/inc/PHPMailer/src/Exception.php';
+require_once __DIR__ . '/inc/PHPMailer/src/PHPMailer.php';
+require_once __DIR__ . '/inc/PHPMailer/src/SMTP.php';
 
 include('connection.php');
 require_once 'inc/functions.php';
