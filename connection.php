@@ -15,6 +15,7 @@ require_once __DIR__ . '/config.php';
 // Établissement de la connexion à la base de données en utilisant 
 // les constantes (DB_HOST, DB_USER, etc.) définies dans config.php.
 $bdd = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+mysqli_set_charset($bdd, "utf8");
 
 // On vérifie immédiatement si la connexion a échoué.
 if (mysqli_connect_errno()) {
