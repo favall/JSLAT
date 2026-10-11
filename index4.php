@@ -53,7 +53,9 @@ $lien = "modfich.php?Id=".urlencode($chaine_crypte);
 	// ********************************************************************************************************
 	// Décommenter la ligne ci-dessous une fois que les fiches ont été générées en pdf
 	//
-	 echo '<br><center><font color="red"><h3>Les fiches papier ont déjà été imprimées.<br>Au moment du dépôt, il faudra les demander pour qu\'elles soient imprimées.</h3></font></center>';
+	if (new DateTime() > $date_impression) {
+		 echo '<br><center><font color="red"><h3>Les fiches papier ont déjà été imprimées.<br>Au moment du dépôt, il faudra les demander pour qu\'elles soient imprimées.</h3></font></center>';
+	}
 	//
 	// ********************************************************************************************************
 
