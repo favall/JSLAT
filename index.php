@@ -1,10 +1,14 @@
 <?php
 require_once 'inc/functions.php';
-// ********************************************************************************************************
-// Décommenter la ligne ci-dessous une fois que les réceptions de matériel sont fermées.
-//   retouraccueil('finsaisie.php');    
-//
-// ********************************************************************************************************
+include('variables.php');
+
+//Bloque le formulaire dès que la date de fin de dépôt est passée
+$date_fin_depot = new DateTime('2026-11-20 18:00:00');
+
+if (new DateTime() > $date_fin_depot) {
+    retouraccueil('finsaisie.php');
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -94,7 +98,7 @@ require_once 'inc/functions.php';
   <div class="form-group">
     <label class="control-label col-sm-2" for="Matricule">Matricule ou n° Slat:</label>
     <div class="col-sm-10">
-      <input name="Matricule" type="text" class="form-control" id="Matricule" value="" placeholder="Mettre ici votre matricule Airbus, ou votre numéro de carte Slat" required>
+      <input name="Matricule" type="text" class="form-control" id="Matricule" value="" placeholder="Mettre ici votre matricule Airbus, ou votre numéro de carte Slat" maxlength="10" required>
     </div>
   </div>
 
