@@ -10,7 +10,7 @@ header('Content-Type: application/json; charset=utf-8');
 require_once __DIR__ . '/connection.php';
 
 // Vérification du paramètre de recherche.
-$searchTerm = $_GET['term'] ?? '';
+$searchTerm = isset($_GET['term']) ? $_GET['term'] : '';
 
 if (!is_string($searchTerm) || trim($searchTerm) === '') {
     echo json_encode([]);
