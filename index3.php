@@ -195,7 +195,7 @@ if ($NbErreurs === 0) {
 		    $mail->FromName   = 'SLAT ne pas Répondre';          //L'alias de l'email de l'emetteur		    
     
     $mail->AddAddress($emailPerso);
-    //$mail->AddBCC('mickael.deviese@gmail.com');
+    $mail->AddBCC('mickael.deviese@gmail.com');
     $mail->Subject    =  $objet;                      //Le sujet du mail
     $mail->addAttachment($filePath, $fileName);
     $mail->WordWrap   = 50; 			       //Nombre de caracteres pour le retour a la ligne automatique
