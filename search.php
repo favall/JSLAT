@@ -10,7 +10,7 @@ $tableName = "VenteSLAT";
 $rowName = "Id";
 
 // Connexion à la base de données
-$db = new mysqli($dbHost, $dbUsername, $dbPassword, $dbName);
+//$db = new mysqli($dbHost, $dbUsername, $dbPassword, $dbName);
 
 // Initialisation du tableau $data
 $data = array();
