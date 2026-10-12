@@ -57,8 +57,12 @@ $IBAN_crypte = f_crypt("!Slatparapente31!", $IBAN);
 $Origine = mysqli_real_escape_string($bdd, $_POST['Origine']) ;
 
 $chaine_crypte = f_crypt("!Slatparapente31!", $Matricule) ;
-$lien = "modfich.php?Id=".urlencode($chaine_crypte);
-$lienfull = 'journees.slat.asso.fr/'.$lien;
+
+$lien = "modfich.php?Id=" . urlencode($chaine_crypte);
+$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+    ? 'https'
+    : 'http';
+$lienfull = $protocol . '://' . $_SERVER['HTTP_HOST'] . '/' . $lien;
 
 $x = mysqli_real_escape_string($bdd, $_POST['NbArticles'])+1;
 
