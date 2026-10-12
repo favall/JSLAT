@@ -103,7 +103,7 @@ $Origine = $row[14];
 
 $chaine_crypte = f_crypt("!Slatparapente31!", $Matricule) ;
 $lien = "modfich.php?Id=".urlencode($chaine_crypte);
-$lienfull = 'https://journees.slat.asso.fr/'.$lien;
+$lienfull = 'https://lesjournees.slat.info/'.$lien;
 
 if($Origine == 'Kalidea') {
 $Ref = "Kalidea " . $Matricule;
