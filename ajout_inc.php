@@ -110,17 +110,24 @@ try {
     // Récupérer l'ID inséré
     $lastInsertedId = $bdd->insert_id;
 
-    // Générer le lien du QR code
-    $Id_crypte = $lastInsertedId;
-    //$Id_crypte = f_crypt("!Slatparapente31!", $lastInsertedId);
-    $LienQRCode = "http://journees.slat.asso.fr/QRCode.php?Id=".$Id_crypte;
-    $fichierSortie = 'QRCodes/'.$lastInsertedId.'.png';
-    QRcode::png($LienQRCode, $fichierSortie);
+// Récupérer le domaine et le protocole utilisés
+$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+    ? 'https'
+    : 'http';
 
-    // Générer le lien de modification
-    $chaine_crypte = f_crypt("!Slatparapente31!", $Matricule);
-    $lien = "modfich.php?Id=".urlencode($chaine_crypte);
-    $lienfull = 'journees.slat.asso.fr/'.$lien;
+$baseUrl = $protocol . '://' . $_SERVER['HTTP_HOST'];
+
+// Générer le lien du QR code
+$Id_crypte = $lastInsertedId;
+//$Id_crypte = f_crypt("!Slatparapente31!", $lastInsertedId);
+$LienQRCode = $baseUrl . "/QRCode.php?Id=" . $Id_crypte;
+$fichierSortie = 'QRCodes/' . $lastInsertedId . '.png';
+QRcode::png($LienQRCode, $fichierSortie);
+
+// Générer le lien de modification
+$chaine_crypte = f_crypt("!Slatparapente31!", $Matricule);
+$lien = "modfich.php?Id=" . urlencode($chaine_crypte);
+$lienfull = $baseUrl . '/' . $lien;
 
     // Valider la transaction
     $bdd->query("COMMIT");
