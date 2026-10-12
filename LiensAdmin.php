@@ -42,7 +42,7 @@
 <h2>A tout moment</h2>	
 
 Cette page : <a href="LiensAdmin.php" target="_blank">LiensAdmin.php</a><br>
-Chemin complet pour l'ensemble des liens : https://journees.slat.asso.fr/...<br>
+Chemin complet pour l'ensemble des liens : https://lesjournees.slat.info/...<br>
 <br>
 Page pour les bénévoles de la vente : <a href="LiensUtiles.php" target="_blank">LiensUtiles.php</a><br>
 <br>
