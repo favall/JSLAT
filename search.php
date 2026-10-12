@@ -1,4 +1,3 @@
-```php
 <?php
 
 error_reporting(E_ALL);
@@ -62,4 +61,3 @@ $query->free();
 echo json_encode($data, JSON_UNESCAPED_UNICODE);
 
 ?>
-```
