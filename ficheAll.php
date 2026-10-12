@@ -16,8 +16,8 @@ if (new DateTime() < $date_impression) {
 
 while ($row = mysqli_fetch_row($result)) {
     $Id = $row[0];
-    $url = 'http://journees.slat.asso.fr/fiche.php?Id=' . $Id; // Remplacez par l'URL correcte de votre site
-    $pageContent = file_get_contents_using_curl($url); // Utilisez une fonction pour obtenir le contenu
+    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    $url = $protocol . '://' . $_SERVER['HTTP_HOST'] . '/fiche.php?Id=' . $Id;$pageContent = file_get_contents_using_curl($url); // Utilisez une fonction pour obtenir le contenu
     echo $pageContent; // Affichez le contenu de la page
 }
 
