@@ -151,10 +151,13 @@
     }
 
     $chaine_crypte = f_crypt("!Slatparapente31!", $Matricule);
-    $lien = "modfich.php?Id=" . urlencode($chaine_crypte);
-    $lienfull = 'journees.slat.asso.fr/' . $lien;
-
-    // On calcule le pourcentage d'erreurs
+	$lien = "modfich.php?Id=" . urlencode($chaine_crypte);
+	$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+    	? 'https'
+    	: 'http';
+	$lienfull = $protocol . '://' . $_SERVER['HTTP_HOST'] . '/' . $lien;
+    
+// On calcule le pourcentage d'erreurs
     $RatioErreur = $NbErreurs / mysqli_real_escape_string($bdd, $_POST['NbArticles']);
     switch ($RatioErreur) {
 
