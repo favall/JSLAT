@@ -161,13 +161,13 @@ if ($NbErreurs === 0) {
     $objet = 'Journées SLAT - Vente matériel occasion'; // Objet du message
     $message = "Bonjour<br><br>
     Vos articles ont bien été saisis. Vous n'avez plus qu'à venir les déposer le ".$date_depot." au complexe sportif du CSE, salle de tennis couvert (22 chemin Garric Toulouse).<br>1 euro  par article déposé vous sera demandé.<br><br>
-    Merci de bien conserver cet email : il permet, via le lien ci-dessous, d'apporter des modifications aux informations que vous venez de saisir.<br>journees.slat.asso.fr/modfich.php?Id=".urlencode($chaine_crypte)."<br><br>Vous trouverez également en pièce jointe à ce mail les Conditions Générales du Dépôt Vente des journées SLAT. Nous vous invitons à les consulter.<br><br>L'équipe SLAT";
+    Merci de bien conserver cet email : il permet, via le lien ci-dessous, d'apporter des modifications aux informations que vous venez de saisir.<br>https://lesjournees.slat.info/modfich.php?Id=".urlencode($chaine_crypte)."<br><br>Vous trouverez également en pièce jointe à ce mail les Conditions Générales du Dépôt Vente des journées SLAT. Nous vous invitons à les consulter.<br><br>L'équipe SLAT";
  
 	// Modif du message si fiches déjà imprimées
 	if (new DateTime() > $date_impression) {
 	    $message = "Bonjour<br><br>
 	    Vos articles ont bien été saisis. Vous n'avez plus qu'à venir les déposer le ".$date_depot." au complexe sportif du CSE, salle de tennis couvert (22 chemin Garric Toulouse).<br>1 euro par article déposé vous sera demandé.<br><br>
-	    Merci de bien conserver cet email : en particulier le lien ci-dessous.<br>journees.slat.asso.fr/modfich.php?Id=".urlencode($chaine_crypte)."<br><br>
+	    Merci de bien conserver cet email : en particulier le lien ci-dessous.<br>https://lesjournees.slat.info/modfich.php?Id=".urlencode($chaine_crypte)."<br><br>
 	    Vous trouverez également en pièce jointe à ce mail les Conditions Générales du Dépôt Vente des journées SLAT. Nous vous invitons à les consulter.<br><br>
 	    L'équipe SLAT";
 	} 
