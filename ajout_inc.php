@@ -57,12 +57,8 @@ $IBAN_crypte = f_crypt("!Slatparapente31!", $IBAN);
 $Origine = mysqli_real_escape_string($bdd, $_POST['Origine']) ;
 
 $chaine_crypte = f_crypt("!Slatparapente31!", $Matricule) ;
-
-$lien = "modfich.php?Id=" . urlencode($chaine_crypte);
-$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-    ? 'https'
-    : 'http';
-$lienfull = $protocol . '://' . $_SERVER['HTTP_HOST'] . '/' . $lien;
+$lien = "modfich.php?Id=".urlencode($chaine_crypte);
+$lienfull = 'https://lesjournees.slat.info/'.$lien;
 
 $x = mysqli_real_escape_string($bdd, $_POST['NbArticles'])+1;
 
@@ -110,24 +106,17 @@ try {
     // Récupérer l'ID inséré
     $lastInsertedId = $bdd->insert_id;
 
-// Récupérer le domaine et le protocole utilisés
-$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-    ? 'https'
-    : 'http';
+    // Générer le lien du QR code
+    $Id_crypte = $lastInsertedId;
+    //$Id_crypte = f_crypt("!Slatparapente31!", $lastInsertedId);
+    $LienQRCode = "https://lesjournees.slat.info/QRCode.php?Id=".$Id_crypte;
+    $fichierSortie = 'QRCodes/'.$lastInsertedId.'.png';
+    QRcode::png($LienQRCode, $fichierSortie);
 
-$baseUrl = $protocol . '://' . $_SERVER['HTTP_HOST'];
-
-// Générer le lien du QR code
-$Id_crypte = $lastInsertedId;
-//$Id_crypte = f_crypt("!Slatparapente31!", $lastInsertedId);
-$LienQRCode = $baseUrl . "/QRCode.php?Id=" . $Id_crypte;
-$fichierSortie = 'QRCodes/' . $lastInsertedId . '.png';
-QRcode::png($LienQRCode, $fichierSortie);
-
-// Générer le lien de modification
-$chaine_crypte = f_crypt("!Slatparapente31!", $Matricule);
-$lien = "modfich.php?Id=" . urlencode($chaine_crypte);
-$lienfull = $baseUrl . '/' . $lien;
+    // Générer le lien de modification
+    $chaine_crypte = f_crypt("!Slatparapente31!", $Matricule);
+    $lien = "modfich.php?Id=".urlencode($chaine_crypte);
+    $lienfull = 'https://lesjournees.slat.info/'.$lien;
 
     // Valider la transaction
     $bdd->query("COMMIT");

@@ -42,10 +42,9 @@ include('variables.php');
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-
-require_once __DIR__ . '/inc/PHPMailer/src/Exception.php';
-require_once __DIR__ . '/inc/PHPMailer/src/PHPMailer.php';
-require_once __DIR__ . '/inc/PHPMailer/src/SMTP.php';
+require '../PHPMailer/src/Exception.php';
+require '../PHPMailer/src/PHPMailer.php';
+require '../PHPMailer/src/SMTP.php';
 
 include('connection.php');
 require_once 'inc/functions.php';
@@ -67,7 +66,7 @@ $BIC = mysqli_real_escape_string($bdd, $_POST['BIC']) ;
 $BIC_crypte = f_crypt("!Slatparapente31!", $BIC);
 $chaine_crypte = f_crypt("!Slatparapente31!", $Matricule) ;
 $lien = "modfich.php?Id=".urlencode($chaine_crypte);
-$lienfull = 'journees.slat.asso.fr/'.$lien;
+$lienfull = 'https://lesjournees.slat.info/'.$lien;
 
 // Début de la transaction
 $bdd->query("START TRANSACTION");
@@ -117,7 +116,7 @@ while ($x <= mysqli_real_escape_string($bdd, $_POST['NbArticles'])) {
         // On génère le QRCode qui sera affiché sur la fiche
         $Id_crypte = $lastInsertedId;
         //$Id_crypte = f_crypt("!Slatparapente31!", $lastInsertedId);
-        $LienQRCode = "http://journees.slat.asso.fr/QRCode.php?Id=".$Id_crypte;
+        $LienQRCode = "https://lesjournees.slat.info/QRCode.php?Id=".$Id_crypte;
         $fichierSortie = 'QRCodes/'.$lastInsertedId.'.png';
         QRcode::png($LienQRCode, $fichierSortie);
     }

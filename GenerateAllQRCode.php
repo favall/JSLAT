@@ -61,7 +61,7 @@ $lastInsertedId = $row[0];
 
 // On génère le QRCode qui sera affiché sur la fiche
 $Id_crypte = $lastInsertedId;//$Id_crypte = f_crypt("!Slatparapente31!", $lastInsertedId) ;
-$LienQRCode = "http://journees.slat.asso.fr/QRCode.php?Id=".$Id_crypte;
+$LienQRCode = "https://lesjournees.slat.info/QRCode.php?Id=".$Id_crypte;
 $fichierSortie = 'QRCodes/'.$lastInsertedId.'.png';
 QRcode::png($LienQRCode, $fichierSortie);
 
