@@ -1,29 +1,65 @@
+```php
 <?php
+
 error_reporting(E_ALL);
-ini_set('display_errors', 1);
+ini_set('display_errors', '0');
 
-include('connection.php');
+// La réponse est au format JSON, en UTF-8.
+header('Content-Type: application/json; charset=utf-8');
 
-$searchTerm = mysqli_real_escape_string($bdd, $_GET['term']);
+// Connexion à la base de données.
+require_once __DIR__ . '/connection.php';
+
+// Vérification du paramètre de recherche.
+$searchTerm = $_GET['term'] ?? '';
+
+if (!is_string($searchTerm) || trim($searchTerm) === '') {
+    echo json_encode([]);
+    exit;
+}
+
+// Protection de la valeur utilisée dans la requête SQL.
+$searchTerm = mysqli_real_escape_string($bdd, trim($searchTerm));
 
 $tableName = "VenteSLAT";
 $rowName = "Id";
 
-// Connexion à la base de données
-//$db = new mysqli($dbHost, $dbUsername, $dbPassword, $dbName);
-
-// Initialisation du tableau $data
+// Initialisation du tableau des résultats.
 $data = array();
 
-// Récupération des données correspondantes depuis la table
-//$query = ‎$bdd->query("SELECT * FROM " . $tableName . " WHERE Id LIKE '%" . $searchTerm . "%' AND Statut = 'Réceptionné' ORDER BY " . $rowName . " ASC");
-// On inclue aussi les non réceptionnés, pour éviter de coincer en caisse (ou lors de l'inventaire) si un article a été mal scanné
-$query = $db->query("SELECT * FROM " . $tableName . " WHERE Id LIKE '%" . $searchTerm . "%' AND Statut LIKE '%éceptionné' ORDER BY " . $rowName . " ASC");
+// Recherche des articles dont l'ID correspond.
+// Le filtre inclut les statuts "Réceptionné" et "Non réceptionné".
+$sql = "SELECT *
+        FROM " . $tableName . "
+        WHERE Id LIKE '%" . $searchTerm . "%'
+        AND Statut LIKE '%éceptionné'
+        ORDER BY " . $rowName . " ASC";
 
-while ($row = $query->fetch_assoc()) {
-    $data[] = $row["Id"] . ': ' . $row["TypeArticle"] . ' de marque ' . $row["MarqueArticle"] . ' taille ' . $row["TailleArticle"] . ' (' . $row["PrixArticle"] . ' euros)';
+// Exécution de la requête avec la connexion $bdd.
+$query = $bdd->query($sql);
+
+// Vérification du résultat de la requête.
+if ($query === false) {
+    error_log('Erreur SQL dans search.php : ' . $bdd->error);
+    http_response_code(500);
+    echo json_encode([]);
+    exit;
 }
 
-// Retournez les données au format JSON
-echo json_encode($data);
+// Construction de la liste des résultats.
+while ($row = $query->fetch_assoc()) {
+    $data[] = $row["Id"]
+        . ': ' . $row["TypeArticle"]
+        . ' de marque ' . $row["MarqueArticle"]
+        . ' taille ' . $row["TailleArticle"]
+        . ' (' . $row["PrixArticle"] . ' euros)';
+}
+
+// Libération du résultat SQL.
+$query->free();
+
+// Retour des données au format JSON.
+echo json_encode($data, JSON_UNESCAPED_UNICODE);
+
 ?>
+```
