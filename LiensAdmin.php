@@ -55,14 +55,15 @@ Permet d'afficher tout un tas de chose, notamment des reports pour Laurent.<br>
 <br>
 Tableau de synthèse, orienté mobile : <a href="suivi_mobile.php" target="_blank">suivi_mobile.php</a><br>
 <br>
-Page web pour accéder directement à la base de donnée SQL :
-<a href="https://parapente.slat.asso.fr/soft/_adminer.php" target="_blank">Adminer</a><br>
 Lien vers le fichier de log si problème écriture SQL (vite = tout est bon) :
 <a href="log.txt" target="_blank">log.txt</a><br>
 
 
 <h2>Avant le jour de la vente</h2>	
 Lien vers le formulaire : <a href="index.php" target="_blank">index.php</a><br>
+<br>
+
+Lien pour regénérer tous les QRCodes : <a href="GenerateAllQRCode.php" target="_blank">GenerateAllQRCode.php</a><br>
 <br>
 
 Lien qui permet de générer l'ensemble des fiches, pour impression : <a href="ficheAll.php" target="_blank">ficheAll.php</a><br>
