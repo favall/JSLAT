@@ -10,7 +10,7 @@ $date_impression = new DateTime('2026-11-19 09:00:00');
 $date_fin_depot = new DateTime('2026-11-20 17:30:00');
 
 //Affiché à divers endroits, dont mail de confirmation
-$date_depot = "19/11/2025 (de 11h30 à 18h) ou le 20/11/2025 (de 11h30 à 17h30)";
+$date_depot = "19/11/2026 (de 11h30 à 18h) ou le 20/11/2026 (de 11h30 à 17h30)";
 
 //Sert à forcer le statut à "Réceptionné", même s'il a été vendu lors des préventes (dans modfich_locked)
 $date_fin_prevente = "2026-11-21 10:00:00";
