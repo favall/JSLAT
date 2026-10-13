@@ -16,7 +16,9 @@ ENV TZ=Europe/Paris
 COPY php.ini /usr/local/etc/php/conf.d/custom.ini
 COPY . /var/www/html/
 
-RUN mkdir -p /var/www/html/QRCodes \
-    && chown -R www-data:www-data /var/www/html \
-    && chmod 755 /var/www/html/QRCodes
+RUN mkdir -p /var/www/html/QRCodes /var/www/data \
+    && rm -f /var/www/html/log.txt \
+    && ln -s /var/www/data/log.txt /var/www/html/log.txt \
+    && chown -R www-data:www-data /var/www/html /var/www/data \
+    && chmod 755 /var/www/html/QRCodes /var/www/data
 RUN chown -R www-data:www-data /var/www/html
