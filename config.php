@@ -46,6 +46,12 @@ define('SMTP_USER', getenv('SMTP_USER'));
 // Mot de passe ou Clé d'API du serveur SMTP
 define('SMTP_PASS', getenv('SMTP_PASS'));
 
+// Adresse e-mail de l'expéditeur (doit être validée chez le fournisseur SMTP, ex: Brevo)
+define('SMTP_FROM', getenv('SMTP_FROM') ?: 'lesjournees@slat.info');
+
+// Nom affiché pour l'expéditeur
+define('SMTP_FROM_NAME', getenv('SMTP_FROM_NAME') ?: 'ne pas répondre les journées SLAT');
+
 
 // -------------------------------------------------------------------------
 // 3. SÉCURITÉ DE L'APPLICATION

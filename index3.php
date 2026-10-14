@@ -180,8 +180,8 @@ if ($NbErreurs === 0) {
     //Management de l'envoi du mail
     $mail = new PHPMailer();
 		    $mail->IsSMTP();
-		    $mail->Host = 'smtp.postmarkapp.com';               //Adresse IP ou DNS du serveur SMTP
-		    $mail->Port = 587;                          //Port TCP du serveur SMTP
+		    $mail->Host = SMTP_HOST;               //Adresse IP ou DNS du serveur SMTP (variable d'environnement)
+		    $mail->Port = SMTP_PORT;                          //Port TCP du serveur SMTP (variable d'environnement)
 		    $mail->SMTPAuth = true;                        //Utiliser l'identification
 		    $mail->CharSet = 'UTF-8';
 		   
@@ -191,8 +191,8 @@ if ($NbErreurs === 0) {
 		       $mail->Password   =  SMTP_PASS;
 		    }
 		   
-		    $mail->From       = 'slat.nepasrepondre@slat.asso.fr';                //L'email à afficher pour l'envoi
-		    $mail->FromName   = 'SLAT ne pas Répondre';          //L'alias de l'email de l'emetteur		    
+		    $mail->From       = SMTP_FROM;                //L'email à afficher pour l'envoi (variable d'environnement)
+		    $mail->FromName   = SMTP_FROM_NAME;          //L'alias de l'email de l'emetteur (variable d'environnement)		    
     
     $mail->AddAddress($emailPerso);
     $mail->AddBCC('mickael.deviese@gmail.com');
