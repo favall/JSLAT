@@ -54,8 +54,8 @@
     $phoneNumber = mysqli_real_escape_string($bdd, $_POST['phoneNumber']);
     $IBAN = mysqli_real_escape_string($bdd, $_POST['IBAN']);
     $BIC = '';//mysqli_real_escape_string($bdd, $_POST['BIC']);
-    $BIC_crypte = '';//f_crypt("!Slatparapente31!", $BIC);
-    $IBAN_crypte = f_crypt("!Slatparapente31!", $IBAN);
+    $BIC_crypte = '';//f_crypt(APP_KEY, $BIC);
+    $IBAN_crypte = f_crypt(APP_KEY, $IBAN);
 
     // Début de la boucle
     $x = 1; $NbErreurs=0;
@@ -80,8 +80,8 @@
       $NomStatutArticle = 'StatutArticle' . $x;
       $StatutArticle = mysqli_real_escape_string($bdd, $_POST[$NomStatutArticle]);
 
-      $BIC_crypte = f_crypt("!Slatparapente31!", $BIC);
-      $IBAN_crypte = f_crypt("!Slatparapente31!", $IBAN);
+      $BIC_crypte = f_crypt(APP_KEY, $BIC);
+      $IBAN_crypte = f_crypt(APP_KEY, $IBAN);
 
       // On ajoute l'article en question dans la base de données
       $table = "VenteSLAT";
@@ -150,7 +150,7 @@
       $x++;
     }
 
-    $chaine_crypte = f_crypt("!Slatparapente31!", $Matricule);
+    $chaine_crypte = f_crypt(APP_KEY, $Matricule);
     $lien = "modfich.php?Id=" . urlencode($chaine_crypte);
     $lienfull = 'https://lesjournees.slat.info/' . $lien;
 

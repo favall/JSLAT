@@ -77,7 +77,7 @@
     
     // ****************************************************
     $Id = $_GET['Id'];
-    $Matricule = f_decrypt('!Slatparapente31!', $Id);
+    $Matricule = f_decrypt(APP_KEY, $Id);
     // ****************************************************
 
     $table = "VenteSLAT";
@@ -94,8 +94,8 @@
     $Prenom = $row[1];
     $emailPerso = $row[2];
     $phoneNumber = $row[3];
-    $IBAN = f_decrypt('!Slatparapente31!', $row[4]);
-    $BIC = f_decrypt('!Slatparapente31!', $row[5]);
+    $IBAN = f_decrypt(APP_KEY, $row[4]);
+    $BIC = f_decrypt(APP_KEY, $row[5]);
     $Origine = $row[12];
     //}
 
@@ -166,7 +166,7 @@
         $result = $bdd->query($sqlquery);
         $x = 1;
 
-        $chaine_crypte = f_crypt("!Slatparapente31!", $Matricule);
+        $chaine_crypte = f_crypt(APP_KEY, $Matricule);
         $lien = "ajout.php?Id=".urlencode($chaine_crypte);
 
         while($row = mysqli_fetch_row($result)) {
@@ -187,7 +187,7 @@
 				//				
 				//*************************************************************************            
             
-            $Id_crypte = f_crypt("!Slatparapente31!", $Id);
+            $Id_crypte = f_crypt(APP_KEY, $Id);
             $liensuppr = "suppr.php?Id=".urlencode($Id_crypte);
 
             print '<h3>Article '.$x.'</h3>';

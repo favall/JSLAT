@@ -70,7 +70,7 @@ $row = mysqli_fetch_row($result);
 $Id = $row[0];
 
 //On écrit dans la table le lien vers la facture
-$Id_crypte = f_crypt("!Slatparapente31!", $Id);
+$Id_crypte = f_crypt(APP_KEY, $Id);
 $lien = "facture.php?Id=".urlencode($Id_crypte);
 $lienfull = 'https://lesjournees.slat.info/'.$lien;
 $sqlquery="UPDATE `$table` SET LienFacture = '$lienfull' where ListeArticles = '$ListeArticles'";

@@ -60,7 +60,7 @@ while($row = mysqli_fetch_row($result)) {
 $lastInsertedId = $row[0];
 
 // On génère le QRCode qui sera affiché sur la fiche
-$Id_crypte = $lastInsertedId;//$Id_crypte = f_crypt("!Slatparapente31!", $lastInsertedId) ;
+$Id_crypte = $lastInsertedId;//$Id_crypte = f_crypt(APP_KEY, $lastInsertedId) ;
 $LienQRCode = "https://lesjournees.slat.info/QRCode.php?Id=".$Id_crypte;
 $fichierSortie = 'QRCodes/'.$lastInsertedId.'.png';
 QRcode::png($LienQRCode, $fichierSortie);

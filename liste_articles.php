@@ -79,7 +79,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     echo '<td>', "{$row['Statut']}", '</td>'; //Statut
     echo '<td>', "{$row['Origine']}", '</td>'; //Origine
     echo '<td>', "{$row['ModifiedTime']}", '</td>'; //Origine
-	 $Id_crypte = f_crypt("!Slatparapente31!", $row['Id']);    
+	 $Id_crypte = f_crypt(APP_KEY, $row['Id']);    
     $lien= 'fiche.php?Id='.$row['Id'];
     $lien2= 'QRCode.php?Id='.$row['Id'];
     $lien3= 'log_article.php?Id='.$row['Id'];

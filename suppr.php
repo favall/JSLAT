@@ -7,7 +7,7 @@ $table = "VenteSLAT";
 // ****************************************************
 
 $Id = $_GET['Id'] ;
-$Id = f_decrypt('!Slatparapente31!', $Id);
+$Id = f_decrypt(APP_KEY, $Id);
 $IdArticle = $Id;
 
 // ****************************************************
@@ -60,7 +60,7 @@ $Matricule = $Matricule[0];
 mysqli_close ($bdd);
 
 // On retourne à la page modfich
-$chaine_crypte = f_crypt("!Slatparapente31!", $Matricule) ;
+$chaine_crypte = f_crypt(APP_KEY, $Matricule) ;
 $lien = "modfich.php?Id=".urlencode($chaine_crypte);
 retouraccueil($lien);
 

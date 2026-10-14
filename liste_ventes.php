@@ -56,7 +56,7 @@
     echo '<tbody>';
     while ($row = mysqli_fetch_assoc($result)) {
 
-        $IBAN = f_decrypt('!Slatparapente31!', $row['IBAN']);
+        $IBAN = f_decrypt(APP_KEY, $row['IBAN']);
         $PrixLessComm = 0.97 * $row['Total Vendeur'];
         echo '<tr>';
         echo '<td>', $row['Nom'], '</td>';

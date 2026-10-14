@@ -52,11 +52,11 @@ $emailPerso = mysqli_real_escape_string($bdd, $_POST['emailPerso']) ;
 $phoneNumber = mysqli_real_escape_string($bdd, $_POST['phoneNumber']) ;
 $IBAN = mysqli_real_escape_string($bdd, $_POST['IBAN']) ;
 $BIC = '';//mysqli_real_escape_string($bdd, $_POST['BIC']) ;
-$BIC_crypte = f_crypt("!Slatparapente31!", $BIC);
-$IBAN_crypte = f_crypt("!Slatparapente31!", $IBAN);
+$BIC_crypte = f_crypt(APP_KEY, $BIC);
+$IBAN_crypte = f_crypt(APP_KEY, $IBAN);
 $Origine = mysqli_real_escape_string($bdd, $_POST['Origine']) ;
 
-$chaine_crypte = f_crypt("!Slatparapente31!", $Matricule) ;
+$chaine_crypte = f_crypt(APP_KEY, $Matricule) ;
 $lien = "modfich.php?Id=".urlencode($chaine_crypte);
 $lienfull = 'https://lesjournees.slat.info/'.$lien;
 
@@ -108,13 +108,13 @@ try {
 
     // Générer le lien du QR code
     $Id_crypte = $lastInsertedId;
-    //$Id_crypte = f_crypt("!Slatparapente31!", $lastInsertedId);
+    //$Id_crypte = f_crypt(APP_KEY, $lastInsertedId);
     $LienQRCode = "https://lesjournees.slat.info/QRCode.php?Id=".$Id_crypte;
     $fichierSortie = 'QRCodes/'.$lastInsertedId.'.png';
     QRcode::png($LienQRCode, $fichierSortie);
 
     // Générer le lien de modification
-    $chaine_crypte = f_crypt("!Slatparapente31!", $Matricule);
+    $chaine_crypte = f_crypt(APP_KEY, $Matricule);
     $lien = "modfich.php?Id=".urlencode($chaine_crypte);
     $lienfull = 'https://lesjournees.slat.info/'.$lien;
 

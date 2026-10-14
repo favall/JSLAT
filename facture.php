@@ -40,7 +40,7 @@ date_default_timezone_set('Europe/Paris');
 setlocale(LC_TIME, 'fr_FR.utf8','fra');
 
 $Id_crypte = $_GET['Id'] ;
-$Id = f_decrypt('!Slatparapente31!', $Id_crypte);
+$Id = f_decrypt(APP_KEY, $Id_crypte);
 
 print '<br>';
 

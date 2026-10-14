@@ -101,7 +101,7 @@ $Lien = $row[12];
 $Statut = $row[13];
 $Origine = $row[14];
 
-$chaine_crypte = f_crypt("!Slatparapente31!", $Matricule) ;
+$chaine_crypte = f_crypt(APP_KEY, $Matricule) ;
 $lien = "modfich.php?Id=".urlencode($chaine_crypte);
 $lienfull = 'https://lesjournees.slat.info/'.$lien;
 
@@ -112,8 +112,8 @@ $BIC = $row[7];
 
 }else {
     $Ref = $Matricule ;
-    $IBAN = f_decrypt('!Slatparapente31!', $row[6]);
-    $BIC = f_decrypt('!Slatparapente31!', $row[7]);
+    $IBAN = f_decrypt(APP_KEY, $row[6]);
+    $BIC = f_decrypt(APP_KEY, $row[7]);
 
 };
 

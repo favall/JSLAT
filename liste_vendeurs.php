@@ -83,7 +83,7 @@
             echo '<td>', $row['Articles'], "</td>";
             //echo '<td>', $row['Liste'], "</td>";
             echo '<td>', $row['Modification'], "</td>";
-            $chaine_crypte = f_crypt("!Slatparapente31!", $row['Matricule / Commande']);
+            $chaine_crypte = f_crypt(APP_KEY, $row['Matricule / Commande']);
             $lien = "modfich_admin.php?Id=" . urlencode($chaine_crypte);
             echo '<td><a href=', "$lien", ' target="_blank">', "Admin", '</a></td>';
             $lien = "ficheA4.php?Id=" . urlencode($chaine_crypte);

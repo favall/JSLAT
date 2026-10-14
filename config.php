@@ -54,5 +54,10 @@ define('SMTP_PASS', getenv('SMTP_PASS'));
 // Clé secrète utilisée par les fonctions f_crypt() et f_decrypt() 
 // pour chiffrer les données sensibles (comme les IBAN ou les matricules).
 // En production, cette clé pourra être définie dans Coolify.
-define('APP_KEY', getenv('APP_KEY'));
+$appKey = getenv('APP_KEY');
+if (!$appKey || strlen($appKey) < 32) {
+    http_response_code(500);
+    exit('Configuration incomplète.');
+}
+define('APP_KEY', $appKey);
 ?>

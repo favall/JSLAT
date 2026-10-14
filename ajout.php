@@ -149,7 +149,7 @@ $table = "VenteSLAT";
 // ****************************************************
 
 $Id = $_GET['Id'] ;
-$Matricule = f_decrypt('!Slatparapente31!', $Id);
+$Matricule = f_decrypt(APP_KEY, $Id);
 
 // ****************************************************
 
@@ -169,8 +169,8 @@ $Nom = $row[0];
 $Prenom = $row[1];
 $emailPerso = $row[2];
 $phoneNumber = $row[3];
-$IBAN = f_decrypt('!Slatparapente31!', $row[4]);
-$BIC = f_decrypt('!Slatparapente31!', $row[5]);
+$IBAN = f_decrypt(APP_KEY, $row[4]);
+$BIC = f_decrypt(APP_KEY, $row[5]);
 $Origine = $row[11];
 
 //}

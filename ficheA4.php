@@ -6,7 +6,7 @@ $table = "VenteSLAT";
 
 // ****************************************************
 $Id = $_GET['Id'] ;
-$Matricule = f_decrypt('!Slatparapente31!', $Id);
+$Matricule = f_decrypt(APP_KEY, $Id);
 
 // ****************************************************
 

@@ -4,7 +4,7 @@ require_once 'inc/functions.php';
 
 $table = "VenteSLAT";
 $Id_crypte = $_GET['Id'];
-$Id = $Id_crypte; //$Id = f_decrypt('!Slatparapente31!', $Id_crypte);
+$Id = $Id_crypte; //$Id = f_decrypt(APP_KEY, $Id_crypte);
 
 // On récupère le lien de la fiche Vendeur, de l'article
 //$sql = "SELECT Lien FROM $table WHERE id = $Id LIMIT 1";
@@ -13,7 +13,7 @@ $result = $bdd->query($sql);
 $row = $result->fetch_assoc();
 $Matricule = $row["Matricule"];
 
-$chaine_crypte = f_crypt("!Slatparapente31!", $Matricule) ;
+$chaine_crypte = f_crypt(APP_KEY, $Matricule) ;
 $lien = "modfich_admin.php?Id=".urlencode($chaine_crypte);
 
 switch ($row["Statut"]) {
