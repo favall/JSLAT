@@ -71,7 +71,9 @@
             case 'Chaussures Snowboard':
             case 'Chaussures Rando':
                addOption(tailleArticle, '', '');
-					addOption(tailleArticle, '27 (EU) / 17 (MP)', '27 (EU) / 17 (MP)');
+					addOption(tailleArticle, '25 (EU) / 16 (MP)', '25 (EU) / 16 (MP)');
+					addOption(tailleArticle, '26 (EU) / 16,5 (MP)', '26 (EU) / 16,5 (MP)');		
+				    addOption(tailleArticle, '27 (EU) / 17 (MP)', '27 (EU) / 17 (MP)');
 					addOption(tailleArticle, '28 (EU) / 17,5 (MP)', '28 (EU) / 17,5 (MP)');
 					addOption(tailleArticle, '29 (EU) / 18 (MP)', '29 (EU) / 18 (MP)');
 					addOption(tailleArticle, '30 (EU) / 19 (MP)', '30 (EU) / 19 (MP)');
@@ -118,7 +120,7 @@
                 break;
             default:
                 addOption(tailleArticle, '', '');
-					 for (let i = 100; i <= 200; i++) {
+					 for (let i = 60; i <= 200; i++) {
 					    addOption(tailleArticle, i + ' cm', i + ' cm');
 					 }
                 break;
