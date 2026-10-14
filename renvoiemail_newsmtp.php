@@ -42,7 +42,7 @@ $table = "VenteSLAT";
             
             // Mise à jour du message pour utiliser la variable $date_depot au lieu d'une date en dur$message = "Bonjour<br><br>
             Vos articles ont bien été saisis. Vous n'avez plus qu'à venir les déposer le ".$date_depot." au complexe sportif du CSE, salle de tennis couvert (22 chemin Garric Toulouse).<br>1 euro par article déposé vous sera demandé.<br><br>
-            Merci de bien conserver cet email : il permet, via le lien ci-dessous, d'apporter des modifications aux informations que vous venez de saisir.<br>journees.slat.asso.fr/modfich.php?Id=".urlencode($chaine_crypte)."<br><br>Vous trouverez également en pièce jointe à ce mail les Conditions Générales du Dépôt Vente des journées SLAT. Nous vous invitons à les consulter.<br><br>L'équipe SLAT";
+            Merci de bien conserver cet email : il permet, via le lien ci-dessous, d'apporter des modifications aux informations que vous venez de saisir.<br>https://lesjournees.slat.info/modfich.php?Id=".urlencode($chaine_crypte)."<br><br>Vous trouverez également en pièce jointe à ce mail les Conditions Générales du Dépôt Vente des journées SLAT. Nous vous invitons à les consulter.<br><br>L'équipe SLAT";
             
             // Fichier joint
             $scriptDirectory = __DIR__;
