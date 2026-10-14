@@ -187,8 +187,8 @@ if ($NbErreurs === 0) {
 		   
 		    if($mail->SMTPAuth){
 		       $mail->SMTPSecure = 'tls';               //Protocole de sécurisation des échanges avec le SMTP
-		       $mail->Username   =  'd3b9ee5d-3a25-4bad-bd87-c2173b60f51a';
-		       $mail->Password   =  'd3b9ee5d-3a25-4bad-bd87-c2173b60f51a';
+		       $mail->Username   =  SMTP_USER;
+		       $mail->Password   =  SMTP_PASS;
 		    }
 		   
 		    $mail->From       = 'slat.nepasrepondre@slat.asso.fr';                //L'email à afficher pour l'envoi
