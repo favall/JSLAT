@@ -16,4 +16,4 @@ $date_depot = "19/11/2026 (de 11h30 à 18h) ou le 20/11/2026 (de 11h30 à 17h30)
 $date_fin_prevente = "2026-11-21 10:00:00";
 
 //Affiché à divers endroits, dont mail de confirmation et fiche papier (partie vendeur)
-$date_retour = "Mardi 9/12 (15h à 19h),  Mercredi 10/12 (15h à 19h), Jeudi 11/12 (11h à 14h)";
+$date_retour = "Du mardi 08/12/26 au jeudi 10/12/2026, de 11h30 à 14h00 et de 16h00 à 18h00";
