@@ -1,29 +1,31 @@
 <?php
+
+mysqli_report(MYSQLI_REPORT_OFF);
+
 session_start();
 
 include('connection.php');
-
-// Désactive les exceptions automatiques MySQLi pour gérer les erreurs
-mysqli_report(MYSQLI_REPORT_OFF);
 
 // Vérification de la connexion
 if (!isset($bdd) || !($bdd instanceof mysqli)) {
     die("Erreur : connexion MySQLi indisponible.");
 }
 
-// Tables à purger
+// Tables d'origine et leurs sauvegardes
 $tables = array(
-    'VenteSLAT.log',
-    'VenteSLAT_factu',
-    'VenteSLAT'
+    'VenteSLAT'       => 'VenteSLAT.bak',
+    'VenteSLAT.log'   => 'VenteSLAT.log.bak',
+    'VenteSLAT_factu' => 'VenteSLAT_factu.bak'
 );
 
 $erreur = '';
 $resultats = array();
+$sauvegardes = array();
 $purgeTerminee = false;
 
-// Génération du jeton de sécurité du formulaire
+// Génération du jeton de sécurité
 if (!isset($_SESSION['purge_token'])) {
+
     $aleatoire = openssl_random_pseudo_bytes(32);
 
     if ($aleatoire === false) {
@@ -46,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ) {
         $erreur = "Demande invalide. Rechargez la page.";
 
-    // Vérification de la confirmation explicite
+    // Confirmation explicite
     } elseif (
         !isset($_POST['confirmation']) ||
         $_POST['confirmation'] !== 'PURGER'
@@ -55,54 +57,123 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     } else {
 
-        // Début de la transaction
-        if (!$bdd->begin_transaction()) {
-            $erreur = "Impossible de démarrer la transaction : "
-                    . $bdd->error;
+        $ok = true;
 
-        } else {
+        /*
+         * ÉTAPE 1 : suppression des anciennes sauvegardes
+         */
+        foreach ($tables as $table => $backup) {
 
-            $ok = true;
+            $nomBackup = '`' . str_replace('`', '``', $backup) . '`';
 
-            foreach ($tables as $table) {
+            if (!$bdd->query("DROP TABLE IF EXISTS " . $nomBackup)) {
 
-                // Protection du nom de table
+                $erreur = "Impossible de supprimer l'ancienne sauvegarde "
+                        . $backup . " : " . $bdd->error;
+
+                $ok = false;
+                break;
+            }
+        }
+
+        /*
+         * ÉTAPE 2 : copie des tables d'origine
+         *
+         * CREATE TABLE LIKE copie la structure et les index.
+         * INSERT INTO ... SELECT copie les données.
+         *
+         * Aucune purge ne sera effectuée si une copie échoue.
+         */
+        if ($ok) {
+
+            foreach ($tables as $table => $backup) {
+
                 $nomTable = '`' . str_replace('`', '``', $table) . '`';
+                $nomBackup = '`' . str_replace('`', '``', $backup) . '`';
 
-                $sql = "DELETE FROM " . $nomTable;
+                // Copie de la structure
+                $sql = "CREATE TABLE " . $nomBackup
+                     . " LIKE " . $nomTable;
 
                 if (!$bdd->query($sql)) {
-                    $erreur = "Erreur lors de la purge de "
-                            . $table . " : " . $bdd->error;
+
+                    $erreur = "Échec de la création de la sauvegarde "
+                            . $backup . " : " . $bdd->error;
 
                     $ok = false;
                     break;
                 }
 
-                $resultats[$table] = $bdd->affected_rows;
+                // Copie des données
+                $sql = "INSERT INTO " . $nomBackup
+                     . " SELECT * FROM " . $nomTable;
+
+                if (!$bdd->query($sql)) {
+
+                    $erreur = "Échec de la copie des données de "
+                            . $table . " vers " . $backup
+                            . " : " . $bdd->error;
+
+                    $ok = false;
+                    break;
+                }
+
+                $sauvegardes[$backup] = $bdd->affected_rows;
             }
+        }
 
-            if ($ok) {
+        /*
+         * ÉTAPE 3 : purge des tables d'origine
+         * Uniquement si toutes les sauvegardes ont réussi.
+         */
+        if ($ok) {
 
-                // Validation des suppressions
-                if ($bdd->commit()) {
-                    $purgeTerminee = true;
+            if (!$bdd->begin_transaction()) {
 
-                    // Empêche la réutilisation du formulaire
-                    unset($_SESSION['purge_token']);
+                $erreur = "Impossible de démarrer la transaction : "
+                        . $bdd->error;
+
+            } else {
+
+                foreach ($tables as $table => $backup) {
+
+                    $nomTable = '`' . str_replace('`', '``', $table) . '`';
+
+                    if (!$bdd->query("DELETE FROM " . $nomTable)) {
+
+                        $erreur = "Échec de la purge de "
+                                . $table . " : " . $bdd->error;
+
+                        $ok = false;
+                        break;
+                    }
+
+                    $resultats[$table] = $bdd->affected_rows;
+                }
+
+                if ($ok) {
+
+                    if ($bdd->commit()) {
+
+                        $purgeTerminee = true;
+
+                        // Empêche la réutilisation du formulaire
+                        unset($_SESSION['purge_token']);
+
+                    } else {
+
+                        $erreur = "Échec de validation de la purge : "
+                                . $bdd->error;
+
+                        $bdd->rollback();
+                        $resultats = array();
+                    }
 
                 } else {
-                    $erreur = "Erreur lors de la validation : "
-                            . $bdd->error;
 
                     $bdd->rollback();
                     $resultats = array();
                 }
-
-            } else {
-                // Annulation des suppressions en cas d'erreur
-                $bdd->rollback();
-                $resultats = array();
             }
         }
     }
@@ -122,21 +193,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <?php if ($purgeTerminee) { ?>
 
-    <h2>Purge terminée avec succès</h2>
+    <h2 style="color: green;">Purge terminée avec succès</h2>
+
+    <h3>Sauvegardes créées</h3>
+
+    <ul>
+        <?php foreach ($sauvegardes as $table => $nombre) { ?>
+            <li>
+                <?php
+                echo htmlspecialchars($table, ENT_QUOTES, 'UTF-8');
+                ?>
+                : <?php echo (int) $nombre; ?> ligne(s) sauvegardée(s)
+            </li>
+        <?php } ?>
+    </ul>
+
+    <h3>Lignes supprimées</h3>
 
     <ul>
         <?php foreach ($resultats as $table => $nombre) { ?>
             <li>
                 <?php
-                echo htmlspecialchars(
-                    $table,
-                    ENT_QUOTES,
-                    'UTF-8'
-                );
+                echo htmlspecialchars($table, ENT_QUOTES, 'UTF-8');
                 ?>
-                :
-                <?php echo (int) $nombre; ?>
-                ligne(s) supprimée(s)
+                : <?php echo (int) $nombre; ?> ligne(s) supprimée(s)
             </li>
         <?php } ?>
     </ul>
@@ -147,38 +227,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ATTENTION : ACTION IRRÉVERSIBLE !
     </p>
 
-    <p>
-        Toutes les données des tables suivantes seront supprimées :
-    </p>
+    <p>Les opérations suivantes seront effectuées :</p>
 
-    <ul>
-        <?php foreach ($tables as $table) { ?>
-            <li>
-                <?php
-                echo htmlspecialchars(
-                    $table,
-                    ENT_QUOTES,
-                    'UTF-8'
-                );
-                ?>
-            </li>
+    <ol>
+        <li>Suppression des anciennes sauvegardes.</li>
+        <li>Création de nouvelles sauvegardes contenant les données actuelles.</li>
+        <li>Purge des tables d'origine uniquement si les copies réussissent.</li>
+    </ol>
+
+    <table border="1" cellpadding="6" cellspacing="0">
+        <tr>
+            <th>Table d'origine</th>
+            <th>Sauvegarde</th>
+        </tr>
+
+        <?php foreach ($tables as $table => $backup) { ?>
+            <tr>
+                <td>
+                    <?php echo htmlspecialchars($table, ENT_QUOTES, 'UTF-8'); ?>
+                </td>
+                <td>
+                    <?php echo htmlspecialchars($backup, ENT_QUOTES, 'UTF-8'); ?>
+                </td>
+            </tr>
         <?php } ?>
-    </ul>
+    </table>
 
     <p>
-        Les tables elles-mêmes et leur structure seront conservées.
+        <strong>Attention :</strong>
+        les anciennes sauvegardes seront remplacées.
     </p>
 
     <?php if ($erreur !== '') { ?>
         <p style="color: red; font-weight: bold;">
-            <?php
-            echo htmlspecialchars(
-                $erreur,
-                ENT_QUOTES,
-                'UTF-8'
-            );
-            ?>
+            <?php echo htmlspecialchars($erreur, ENT_QUOTES, 'UTF-8'); ?>
         </p>
+
+        <?php if (!empty($sauvegardes)) { ?>
+            <p>
+                Certaines sauvegardes ont été créées avant l'erreur.
+                Vérifiez leur contenu avant de relancer l'opération.
+            </p>
+        <?php } ?>
     <?php } ?>
 
     <form method="post">
@@ -201,7 +291,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </p>
 
         <label for="confirmation">
-            Pour confirmer, saisissez <strong>PURGER</strong> :
+            Saisissez <strong>PURGER</strong> pour confirmer :
         </label>
 
         <br><br>
@@ -215,7 +305,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         >
 
         <button type="submit">
-            Purger définitivement
+            Sauvegarder puis purger
         </button>
 
     </form>
