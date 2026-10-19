@@ -21,6 +21,7 @@ $tables = array(
 $erreur = '';
 $resultats = array();
 $sauvegardes = array();
+$erreursReset = array();
 $purgeTerminee = false;
 
 // Génération du jeton de sécurité
@@ -41,6 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Vérification du jeton de sécurité
     if (
         !isset($_POST['csrf_token'], $_SESSION['purge_token']) ||
+        !is_string($_POST['csrf_token']) ||
         !hash_equals(
             $_SESSION['purge_token'],
             $_POST['csrf_token']
@@ -77,12 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         /*
-         * ÉTAPE 2 : copie des tables d'origine
-         *
-         * CREATE TABLE LIKE copie la structure et les index.
-         * INSERT INTO ... SELECT copie les données.
-         *
-         * Aucune purge ne sera effectuée si une copie échoue.
+         * ÉTAPE 2 : création des sauvegardes
          */
         if ($ok) {
 
@@ -91,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $nomTable = '`' . str_replace('`', '``', $table) . '`';
                 $nomBackup = '`' . str_replace('`', '``', $backup) . '`';
 
-                // Copie de la structure
+                // Copie de la structure et des index
                 $sql = "CREATE TABLE " . $nomBackup
                      . " LIKE " . $nomTable;
 
@@ -160,6 +157,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         // Empêche la réutilisation du formulaire
                         unset($_SESSION['purge_token']);
 
+                        /*
+                         * ÉTAPE 4 : remise à zéro des compteurs ID
+                         *
+                         * Cette opération est effectuée après le commit,
+                         * car ALTER TABLE peut valider implicitement
+                         * une transaction MySQL.
+                         */
+                        foreach ($tables as $table => $backup) {
+
+                            $nomTable = '`'
+                                      . str_replace('`', '``', $table)
+                                      . '`';
+
+                            $sql = "ALTER TABLE "
+                                 . $nomTable
+                                 . " AUTO_INCREMENT = 1";
+
+                            if (!$bdd->query($sql)) {
+
+                                $erreursReset[$table] = $bdd->error;
+                            }
+                        }
+
                     } else {
 
                         $erreur = "Échec de validation de la purge : "
@@ -182,6 +202,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <title>Purge des tables VenteSLAT</title>
@@ -193,7 +214,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <?php if ($purgeTerminee) { ?>
 
-    <h2 style="color: green;">Purge terminée avec succès</h2>
+    <h2 style="color: green;">
+        Purge terminée
+    </h2>
 
     <h3>Sauvegardes créées</h3>
 
@@ -203,7 +226,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php
                 echo htmlspecialchars($table, ENT_QUOTES, 'UTF-8');
                 ?>
-                : <?php echo (int) $nombre; ?> ligne(s) sauvegardée(s)
+                : <?php echo (int) $nombre; ?>
+                ligne(s) sauvegardée(s)
             </li>
         <?php } ?>
     </ul>
@@ -216,10 +240,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php
                 echo htmlspecialchars($table, ENT_QUOTES, 'UTF-8');
                 ?>
-                : <?php echo (int) $nombre; ?> ligne(s) supprimée(s)
+                : <?php echo (int) $nombre; ?>
+                ligne(s) supprimée(s)
             </li>
         <?php } ?>
     </ul>
+
+    <?php if (empty($erreursReset)) { ?>
+
+        <p style="color: green; font-weight: bold;">
+            Les compteurs AUTO_INCREMENT ont été remis à 1.
+            Le prochain ajout pourra donc recevoir l'ID 1.
+        </p>
+
+    <?php } else { ?>
+
+        <h3 style="color: red;">
+            Attention : certains compteurs n'ont pas été réinitialisés
+        </h3>
+
+        <ul>
+            <?php foreach ($erreursReset as $table => $message) { ?>
+                <li>
+                    <?php
+                    echo htmlspecialchars($table, ENT_QUOTES, 'UTF-8');
+                    ?>
+                    :
+                    <?php
+                    echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
+                    ?>
+                </li>
+            <?php } ?>
+        </ul>
+
+        <p>
+            La purge est effectuée, mais vérifiez les compteurs concernés.
+        </p>
+
+    <?php } ?>
 
 <?php } else { ?>
 
@@ -231,8 +289,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <ol>
         <li>Suppression des anciennes sauvegardes.</li>
-        <li>Création de nouvelles sauvegardes contenant les données actuelles.</li>
-        <li>Purge des tables d'origine uniquement si les copies réussissent.</li>
+        <li>Création des nouvelles sauvegardes.</li>
+        <li>Purge des tables d'origine si les sauvegardes réussissent.</li>
+        <li>Remise à 1 des compteurs AUTO_INCREMENT.</li>
     </ol>
 
     <table border="1" cellpadding="6" cellspacing="0">
@@ -259,6 +318,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </p>
 
     <?php if ($erreur !== '') { ?>
+
         <p style="color: red; font-weight: bold;">
             <?php echo htmlspecialchars($erreur, ENT_QUOTES, 'UTF-8'); ?>
         </p>
@@ -269,6 +329,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 Vérifiez leur contenu avant de relancer l'opération.
             </p>
         <?php } ?>
+
     <?php } ?>
 
     <form method="post">
