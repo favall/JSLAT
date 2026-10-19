@@ -162,7 +162,7 @@ print '
 		L’article vendu sera réglé uniquement par virement bancaire sur le compte '.$IBAN.' au plus tard 15 jours après les journées SLAT.<br>
 		<u>N.B.:</u> le SLAT prélève 3% sur les ventes de matériel<br>
 		<br>
-		<u>Dates du retour des invendus :</u><br>'.$date_retour.' à l’Espace CSE.<br>
+		<b><u>Dates du retour des invendus :</u></b><br>'.$date_retour.' à l’Espace CSE.<br>
 		</div>';		
 		
 //}
