@@ -36,7 +36,7 @@
 <h2>A la remise en route de la vente</h2>	
 <ol>
 	<li>Mettre à jour le fichier variable.php avec les nouvelles dates</li>
-	<li>Réinitialiser les 3 tables (VenteSLAT, VenteSLAT.log et VenteSLAT_factu)</li>
+	<li><a href="liste_ventes.php" target="_blank">Réinitialiser les 3 tables</a> (VenteSLAT, VenteSLAT.log et VenteSLAT_factu)</li>
 </ol>
 
 <h2>A tout moment</h2>	
