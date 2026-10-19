@@ -3,16 +3,15 @@ session_start();
 
 include('connection.php');
 
-// Hypothèse : connection.php crée une connexion mysqli dans $conn.
-if (!isset($conn) || !($conn instanceof mysqli)) {
-    die("Erreur : connexion MySQLi introuvable dans connection.php.");
-}
-
-// Évite les exceptions automatiques de MySQLi
+// Désactive les exceptions automatiques MySQLi pour gérer les erreurs
 mysqli_report(MYSQLI_REPORT_OFF);
 
-// Tables à purger, dans l'ordre
-// VenteSLAT.log est ici interprétée comme un nom de table littéral.
+// Vérification de la connexion
+if (!isset($bdd) || !($bdd instanceof mysqli)) {
+    die("Erreur : connexion MySQLi indisponible.");
+}
+
+// Tables à purger
 $tables = array(
     'VenteSLAT.log',
     'VenteSLAT_factu',
@@ -23,43 +22,43 @@ $erreur = '';
 $resultats = array();
 $purgeTerminee = false;
 
-// Création d'un jeton de sécurité pour le formulaire
+// Génération du jeton de sécurité du formulaire
 if (!isset($_SESSION['purge_token'])) {
-    if (!function_exists('openssl_random_pseudo_bytes')) {
-        die("Erreur : OpenSSL est nécessaire pour sécuriser le formulaire.");
+    $aleatoire = openssl_random_pseudo_bytes(32);
+
+    if ($aleatoire === false) {
+        die("Erreur : impossible de sécuriser le formulaire.");
     }
 
-    $_SESSION['purge_token'] = bin2hex(
-        openssl_random_pseudo_bytes(32)
-    );
+    $_SESSION['purge_token'] = bin2hex($aleatoire);
 }
 
-// Traitement du formulaire de confirmation
+// Traitement du formulaire
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Vérification du jeton de sécurité
     if (
-        !isset($_POST['csrf_token']) ||
+        !isset($_POST['csrf_token'], $_SESSION['purge_token']) ||
         !hash_equals(
             $_SESSION['purge_token'],
             $_POST['csrf_token']
         )
     ) {
-        $erreur = "Demande invalide. Rechargez la page et réessayez.";
+        $erreur = "Demande invalide. Rechargez la page.";
 
     // Vérification de la confirmation explicite
     } elseif (
         !isset($_POST['confirmation']) ||
         $_POST['confirmation'] !== 'PURGER'
     ) {
-        $erreur = "Confirmation incorrecte. Saisissez exactement PURGER.";
+        $erreur = "Confirmation incorrecte. Saisissez PURGER.";
 
     } else {
 
-        // Démarrage d'une transaction
-        if (!$conn->begin_transaction()) {
+        // Début de la transaction
+        if (!$bdd->begin_transaction()) {
             $erreur = "Impossible de démarrer la transaction : "
-                    . $conn->error;
+                    . $bdd->error;
 
         } else {
 
@@ -67,39 +66,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             foreach ($tables as $table) {
 
-                // Protection du nom de table, y compris s'il contient un point
+                // Protection du nom de table
                 $nomTable = '`' . str_replace('`', '``', $table) . '`';
 
                 $sql = "DELETE FROM " . $nomTable;
 
-                if (!$conn->query($sql)) {
-                    $erreur = "Erreur lors de la purge de la table "
-                            . $table . " : " . $conn->error;
+                if (!$bdd->query($sql)) {
+                    $erreur = "Erreur lors de la purge de "
+                            . $table . " : " . $bdd->error;
 
                     $ok = false;
                     break;
                 }
 
-                $resultats[$table] = $conn->affected_rows;
+                $resultats[$table] = $bdd->affected_rows;
             }
 
             if ($ok) {
 
-                if ($conn->commit()) {
+                // Validation des suppressions
+                if ($bdd->commit()) {
                     $purgeTerminee = true;
+
+                    // Empêche la réutilisation du formulaire
                     unset($_SESSION['purge_token']);
 
                 } else {
                     $erreur = "Erreur lors de la validation : "
-                            . $conn->error;
+                            . $bdd->error;
 
-                    $conn->rollback();
+                    $bdd->rollback();
                     $resultats = array();
                 }
 
             } else {
-                // Annulation de la transaction en cas d'erreur
-                $conn->rollback();
+                // Annulation des suppressions en cas d'erreur
+                $bdd->rollback();
                 $resultats = array();
             }
         }
@@ -113,29 +115,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <title>Purge des tables VenteSLAT</title>
 </head>
+
 <body>
 
 <h1>Purge des tables VenteSLAT</h1>
 
 <?php if ($purgeTerminee) { ?>
 
-    <h2>Purge terminée</h2>
-
-    <p>Les tables suivantes ont été purgées avec succès :</p>
+    <h2>Purge terminée avec succès</h2>
 
     <ul>
         <?php foreach ($resultats as $table => $nombre) { ?>
             <li>
-                <?php echo htmlspecialchars($table, ENT_QUOTES, 'UTF-8'); ?>
-                : <?php echo (int) $nombre; ?> ligne(s) supprimée(s)
+                <?php
+                echo htmlspecialchars(
+                    $table,
+                    ENT_QUOTES,
+                    'UTF-8'
+                );
+                ?>
+                :
+                <?php echo (int) $nombre; ?>
+                ligne(s) supprimée(s)
             </li>
         <?php } ?>
     </ul>
 
 <?php } else { ?>
 
-    <p style="color: red; font-weight: bold;">
-        ATTENTION : cette action est irréversible.
+    <p style="color: red; font-size: 1.2em; font-weight: bold;">
+        ATTENTION : ACTION IRRÉVERSIBLE !
     </p>
 
     <p>
@@ -145,16 +154,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <ul>
         <?php foreach ($tables as $table) { ?>
             <li>
-                <?php echo htmlspecialchars($table, ENT_QUOTES, 'UTF-8'); ?>
+                <?php
+                echo htmlspecialchars(
+                    $table,
+                    ENT_QUOTES,
+                    'UTF-8'
+                );
+                ?>
             </li>
         <?php } ?>
     </ul>
 
-    <p>La structure des tables sera conservée.</p>
+    <p>
+        Les tables elles-mêmes et leur structure seront conservées.
+    </p>
 
     <?php if ($erreur !== '') { ?>
-        <p style="color: red;">
-            <?php echo htmlspecialchars($erreur, ENT_QUOTES, 'UTF-8'); ?>
+        <p style="color: red; font-weight: bold;">
+            <?php
+            echo htmlspecialchars(
+                $erreur,
+                ENT_QUOTES,
+                'UTF-8'
+            );
+            ?>
         </p>
     <?php } ?>
 
@@ -174,12 +197,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <p>
             Êtes-vous sûr de vouloir continuer ?
-            Cette opération est irréversible.
+            Cette action est irréversible.
         </p>
 
         <label for="confirmation">
-            Saisissez <strong>PURGER</strong> pour confirmer :
+            Pour confirmer, saisissez <strong>PURGER</strong> :
         </label>
+
+        <br><br>
 
         <input
             type="text"
