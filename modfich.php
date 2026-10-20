@@ -260,7 +260,7 @@ if (new DateTime() > $date_impression) {
                             <input id="IdArticle'.$x.'" name="IdArticle'.$x.'" type="hidden" value="'.$Id.'">
                             <label class="control-label col-sm-2" for="TypeArticle'.$x.'">Type d article :</label>
                             <div class="col-sm-10">
-                                <select class="form-control" name="TypeArticle'.$x.'" id="TypeArticle'.$x.'" required onchange="updateTailleOptions('.$x.')">
+                                <select class="form-control" name="TypeArticle'.$x.'" id="TypeArticle'.$x.'" readonly required onchange="updateTailleOptions('.$x.')">
                                     <option value="'.$TypeArticle.'">'.$TypeArticle.'</option>
                                     <optgroup label="Ski alpin">
                                         <option value="Skis Alpin">Skis Alpin</option>
