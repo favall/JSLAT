@@ -110,6 +110,7 @@ if (new DateTime() > $date_impression) {
 					addOption(tailleArticle, '48 (EU) / 31 (MP)', '48 (EU) / 31 (MP)');
                 break;
             case 'Combinaison Ski enfant':
+			case 'Veste Ski Enfant':
             case 'Veste Ski Enfant':
             case 'Pantalon Ski Enfant':
                 addOption(tailleArticle, '', '');
