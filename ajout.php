@@ -96,6 +96,7 @@ h1 {
 					addOption(tailleArticle, '48 (EU) / 31 (MP)', '48 (EU) / 31 (MP)');
                 break;
             case 'Combinaison Ski enfant':
+			case 'Ensemble Pantalon + Veste':
             case 'Veste Ski Enfant':
             case 'Pantalon Ski Enfant':
                 addOption(tailleArticle, '', '');
