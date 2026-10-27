@@ -34,6 +34,7 @@ h1 {
 <h2>Doublon dans la saisie</h2>
 
 <p>Il y a déjà des articles saisis pour ce matricule. Merci d'utiliser le lien qui vous a été envoyé par email si vous souhaitez les modifier, en ajouter ou en supprimer.
+Si vous n'avez pas de matricule (parce que vous êtes extérieur, ...), mettez votre numéro de portable en guise de matricule.
 Sinon, merci de nous contacter.
 </p>	
 
