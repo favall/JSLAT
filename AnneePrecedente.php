@@ -44,7 +44,7 @@ h1 {
 
 include('connection.php');
 require_once 'inc/functions.php';
-$table = "VenteSLAT.2023";
+$table = "VenteSLAT.2025";
 
 //$sqlquery = "select Nom, Prenom AS 'Prénom', Matricule AS 'Matricule / Commande', emailPerso AS Email, phoneNumber as Portable, Origine, count(Id) AS Articles from `$table` GROUP BY Matricule ORDER BY Origine, Nom";
 $sqlquery = "select `TypeArticle` as Type, `MarqueArticle` as Marque, `TailleArticle` as Taille, `PrixArticle` as Prix, `Statut`, Id from `$table`  WHERE `Statut` <> 'Non réceptionné' ORDER BY Id";
