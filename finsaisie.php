@@ -33,7 +33,7 @@ h1 {
 
 <h2>Fin de la saisie du matériel</h2>
 
-<p>Il est maintenant trop tard pour déposer le matériel. Maintenant, place à la vente, Samedi.<br>
+<p>Il est maintenant trop tard pour saisir du matériel. Maintenant, place à la vente, Samedi.<br>
 Sinon, à l'année prochaine !<br>
 <br>
 L'équipe du Slat
