@@ -7,12 +7,14 @@ $table = "VenteSLAT";
 $date_impression_sql = $date_impression->format('Y-m-d H:i:s');
 $date_impression_sql = $date_impression->format('Y-m-d H:i:s');
 
-if (new DateTime() < $date_impression) {
-    $sqlquery = "SELECT * FROM `$table` WHERE `Origine` <> 'FrancoisDesAlpes' ORDER BY UPPER(NOM) ASC";
-} else {
-    $sqlquery = "SELECT * FROM `$table` WHERE `Origine` <> 'FrancoisDesAlpes' AND `ModifiedTime` > '".$date_impression_sql."' ORDER BY UPPER(NOM) ASC";
-
-}$result = $bdd->query($sqlquery);
+//if (new DateTime() < $date_impression) {
+//    $sqlquery = "SELECT * FROM `$table` WHERE `Origine` <> 'FrancoisDesAlpes' ORDER BY UPPER(NOM) ASC";
+//} else {
+//    $sqlquery = "SELECT * FROM `$table` WHERE `Origine` <> 'FrancoisDesAlpes' AND `ModifiedTime` > '".$date_impression_sql."' ORDER BY UPPER(NOM) ASC";
+//
+//}$result = $bdd->query($sqlquery);
+$sqlquery = "SELECT * FROM `$table` WHERE `Origine` <> 'FrancoisDesAlpes' ORDER BY UPPER(NOM) ASC";
+$result = $bdd->query($sqlquery);
 
 while ($row = mysqli_fetch_row($result)) {
     $Id = $row[0];
