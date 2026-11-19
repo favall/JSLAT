@@ -52,7 +52,7 @@
         $table = "VenteSLAT";
 
 		  // On récupère le nombre d'articles en vente
-        $sqlquery = "SELECT * FROM `$table`";
+        $sqlquery = "SELECT * FROM `$table` WHERE `Origine` <> 'FrancoisDesAlpes'";
         $result = $bdd->query($sqlquery);
         $NbArticles = mysqli_num_rows($result);
 
