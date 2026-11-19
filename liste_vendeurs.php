@@ -57,7 +57,7 @@
         $NbArticles = mysqli_num_rows($result);
 
 		  // On récupère le nombre de vendeurs
-        $sqlquery = "SELECT DISTINCT MATRICULE FROM `$table`";
+        $sqlquery = "SELECT DISTINCT MATRICULE FROM `$table` WHERE `Origine` <> 'FrancoisDesAlpes'";
         $result = $bdd->query($sqlquery);
         $NbVendeurs = mysqli_num_rows($result);
 
